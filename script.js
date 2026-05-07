@@ -34,6 +34,7 @@ var scores = [
 ]
 
 originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+testArea.innerHTML = "";
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function formatNumbers(minutes, seconds, dispms) {
@@ -121,6 +122,7 @@ function resetAll(){
     intervalID = undefined;
     // Implement random quote selection
     originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
+    testArea.innerHTML = "";
 }
 
 // Event listeners for keyboard input and the reset button:
