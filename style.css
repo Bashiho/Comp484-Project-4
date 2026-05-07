@@ -186,3 +186,21 @@ body {
     color: white;
     background-color: #E95D0F;
 }
+
+.matching-blue {
+    border-color: blue;
+    border-radius: 2px;
+    border-width: 10px;
+}
+
+.typo-red {
+    border-color: red;
+    border-radius: 2px;
+    border-width: 10px;
+}
+
+.complete-green {
+    border-color: green;
+    border-radius: 2px;
+    border-width: 10px;
+}

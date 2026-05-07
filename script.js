@@ -1,10 +1,3 @@
-// TBD
-// Task 1:
-// Task 2:
-// Dynamic Visual Feedback
-// Data Persistence
-// Live Performance Metrics
-
 const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
 const originText = document.querySelector("#origin-text p");
@@ -14,22 +7,34 @@ const scoreArea = document.querySelector(".scores");
 
 // Used for timer
 var intervalID;
+var minutes, seconds, dispms;
+
 // Array of quotes used for tests
+// All quotes are from Deadlock characters
 const quotes = [
     "They do lots of things!",
     "Never show fear, no matter the odds",
     "Time to change the world",
     "I like plants",
     "Mina Ha, rise up and take what you deserve",
-    "I donate 1% of all my earnings to lashback, my charity for kids who kinda suck"
+    "I donate 1% of all my earnings to lashback, my charity for kids who kinda suck",
+    "I'm doing this for money, and, well, just money",
+    "Today, I'll explore the mysteries of New Jersey",
+    "I didn't mean to offend you. I'm just socially awkward!",
+    "Oh... I don't know. Get a hot dog?"
 ]
-// Array of score objects, figure out later
+
+// Updates scores to those saved in localStorage
 var scores = [
+    localStorage.getItem("first"), 
+    localStorage.getItem("second"), 
+    localStorage.getItem("third")
+];
 
-]
-
+// Various updates on load, sets quotes, clears input area, and loads scores
 originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
 testArea.innerHTML = "";
+scoreArea.innerHTML = scores[0] + " wpm <br>" + scores[1] + " wpm <br>" + scores[2] + "wpm";
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function formatNumbers(minutes, seconds, dispms) {
@@ -41,7 +46,7 @@ function formatNumbers(minutes, seconds, dispms) {
 
 // Run a standard minute/second/hundredths timer:
 function startTimer() {
-    var timer = 0, minutes, seconds, dispms;
+    var timer = 0;
     intervalID = setInterval(function () {
         // Prepare numbers for display
         dispms = parseInt(timer % 100,10);
@@ -56,44 +61,71 @@ function startTimer() {
     }, 10);
 }
 
-// Compare user input to the test text
-// Must add live feedback and dynamic visual feedback
 function compareText(){
     let input = document.querySelector("#test-area").value;
-    let errors = 0, wpm = 0;
     let testText = originText.innerHTML;
+    let wpm = checkWPM();
+    let errors = 0;
+    let wpmCount = document.querySelector(".wpm");
+    let errorCount = document.querySelector(".error");
+
+    testWrapper.classList.remove("typo-red");
     
     if(input === testText)
         completeTest();
 
-    return errors, wpm;
+    for(let i = 0; i < input.length; i++){
+        if(input[i] !== testText[i]){
+            testWrapper.classList.add("typo-red");
+            errors++;
+        }
+    }
+
+    if(!testWrapper.classList.contains("typo-red"))
+        testWrapper.classList.add("matching-blue");
+
+    wpmCount.innerHTML = "WPM: " + wpm;
+    errorCount.innerHTML = "Errors: " + errors;
+
 }
 
 function completeTest(){
-    resetAll();
-    // checkAndUpdateScore();
+    testWrapper.classList.add("complete-green");
+    clearInterval(intervalID);
+    checkAndUpdateScore();
 }
 
-// Not currently used, look at it later
+function checkWPM(){
+    let wpm = document.querySelector("#test-area").value.length;
+    let time = minutes + (seconds/60);
+    wpm = ((wpm/5) / time);
+    // Return integers only
+    return Number.parseInt(wpm);
+}
+
 function checkAndUpdateScore(){
-    let errors, wpm = compareText();
-    let place = 1;
-    // Compare with top 3
-    for(let i = 0; i < 3; i++){
-        if(wpm < scores[i].wpm)
-            place++;
+    // Calculate WPM
+    let wpm = checkWPM();
+
+    // Compare wpm to current scores
+    if(wpm > scores[0]){
+        scores[2] = scores[1];
+        scores[1] = scores[0];
+        scores[0] = wpm;
     }
-    // Solve logic to add new score to list
-    if(place >= 3){
-        if(place == 3)
-            scores[2] = wpm;
-        else{
-            scores[2] = scores[1];
-            scores[1] = place == 2 ? wpm : scores[0];
-            scores[0] = place == 1 ? wpm : scores[0];
-        }
+    else if(wpm > scores[1]){
+        scores[2] = scores[1];
+        scores[1] = wpm;
     }
-    scoreArea.innerHTML = scores;
+    else if(wpm > scores[2]){
+        scores[2] = wpm;
+    }
+
+    scoreArea.innerHTML = scores[0] + " wpm <br>" + scores[1] + " wpm <br>" + scores[2] + " wpm";
+    // Save scores locally
+    localStorage.setItem("first", scores[0]);
+    localStorage.setItem("second", scores[1]);
+    localStorage.setItem("third", scores[2]);
 }
 
 // Reset everything:
@@ -104,6 +136,9 @@ function resetAll(){
     // Implement random quote selection and reset text areas
     originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
     testArea.value = "";
+    testWrapper.classList.remove("complete-green");
+    testWrapper.classList.remove("typo-red");
+    testWrapper.classList.remove("matching-blue");
 }
 
 // Event listeners for keyboard input and the reset button:
