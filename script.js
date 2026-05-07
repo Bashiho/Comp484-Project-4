@@ -72,6 +72,9 @@ function compareText(){
     let correctChars = 0;
     const perChar = [];
     
+    if(input === testText)
+        completeTest();
+
     for (let i = 0; i < len; i++) {
         const t = testText[i];
         const c = typed[i];
@@ -90,9 +93,8 @@ function compareText(){
 }
 
 function completeTest(){
-    clearInterval(intervalID);
-    checkAndUpdateScore();
     resetAll();
+    // checkAndUpdateScore();
 }
 
 function checkAndUpdateScore(){
@@ -119,10 +121,11 @@ function checkAndUpdateScore(){
 // Reset everything:
 function resetAll(){
     // Reset intervalID for checks in eventListener
+    clearInterval(intervalID);
     intervalID = undefined;
-    // Implement random quote selection
+    // Implement random quote selection and reset text areas
     originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
-    testArea.innerHTML = "";
+    testArea.innerHTML = undefined;
 }
 
 // Event listeners for keyboard input and the reset button:
@@ -131,10 +134,8 @@ resetButton.addEventListener('click', function(e){
 })
 
 testWrapper.addEventListener('keydown', function(e) {
-    if (!intervalID){
+    if (!intervalID)
         startTimer();
-    }
-    else{
-        compareText();
-    }
+
+    compareText();
 })
