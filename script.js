@@ -1,13 +1,8 @@
 // TBD
 // Task 1:
-// Standard Timer Testing
-// Input Validation
-// Event Handling
-// Reset Logic
 // Task 2:
 // Dynamic Visual Feedback
 // Data Persistence
-// Content Randomization
 // Live Performance Metrics
 
 const testWrapper = document.querySelector(".test-wrapper");
@@ -49,7 +44,7 @@ function startTimer() {
     var timer = 0, minutes, seconds, dispms;
     intervalID = setInterval(function () {
         // Prepare numbers for display
-        dispms=parseInt(timer % 100,10);
+        dispms = parseInt(timer % 100,10);
         seconds = parseInt(timer / 100, 10);
         minutes = parseInt(seconds / 60, 10);
         seconds = parseInt(seconds % 60, 10);
@@ -61,34 +56,16 @@ function startTimer() {
     }, 10);
 }
 
-// Match the text entered with the provided text on the page:
-// Probably hyper scuffed but figure it out later lol
+// Compare user input to the test text
+// Must add live feedback and dynamic visual feedback
 function compareText(){
-    let input = document.querySelector("#test-area");
+    let input = document.querySelector("#test-area").value;
     let errors = 0, wpm = 0;
-    testText = originText.innerHTML;
-    const len = Math.max(typed.length, testText.length);
-    const typed = input.value;
-    let correctChars = 0;
-    const perChar = [];
+    let testText = originText.innerHTML;
     
     if(input === testText)
         completeTest();
 
-    for (let i = 0; i < len; i++) {
-        const t = testText[i];
-        const c = typed[i];
-        if (c === undefined) {
-          perChar.push(null);
-        } else {
-          if (c === t) {
-            correctChars++;
-            perChar.push(true);
-          } else {
-            perChar.push(false);
-          }
-        }
-    }
     return errors, wpm;
 }
 
@@ -97,6 +74,7 @@ function completeTest(){
     // checkAndUpdateScore();
 }
 
+// Not currently used, look at it later
 function checkAndUpdateScore(){
     let errors, wpm = compareText();
     let place = 1;
@@ -125,7 +103,7 @@ function resetAll(){
     intervalID = undefined;
     // Implement random quote selection and reset text areas
     originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
-    testArea.innerHTML = undefined;
+    testArea.value = "";
 }
 
 // Event listeners for keyboard input and the reset button:
@@ -133,7 +111,7 @@ resetButton.addEventListener('click', function(e){
     resetAll();
 })
 
-testWrapper.addEventListener('keydown', function(e) {
+testWrapper.addEventListener('input', function(e) {
     if (!intervalID)
         startTimer();
 
