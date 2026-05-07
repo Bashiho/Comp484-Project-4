@@ -21,7 +21,12 @@ const scoreArea = document.querySelector(".scores");
 var intervalID;
 // Array of quotes used for tests
 const quotes = [
-    ""
+    "They do lots of things!",
+    "Never show fear, no matter the odds",
+    "Time to change the world",
+    "I like plants",
+    "Mina Ha, rise up and take what you deserve",
+    "I donate 1% of all my earnings to lashback, my charity for kids who kinda suck"
 ]
 // Array of score objects, figure out later
 var scores = [
