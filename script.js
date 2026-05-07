@@ -12,7 +12,7 @@
 
 const testWrapper = document.querySelector(".test-wrapper");
 const testArea = document.querySelector("#test-area");
-const originText = document.querySelector("#origin-text p").innerHTML;
+const originText = document.querySelector("#origin-text p");
 const resetButton = document.querySelector("#reset");
 const theTimer = document.querySelector(".timer");
 const scoreArea = document.querySelector(".scores");
@@ -33,7 +33,7 @@ var scores = [
 
 ]
 
-originText = quotes[Math.floor(Math.random() * quotes.length)];
+originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
 
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function formatNumbers(minutes, seconds, dispms) {
@@ -65,6 +65,7 @@ function startTimer() {
 function compareText(){
     let input = document.querySelector("#test-area");
     let errors = 0, wpm = 0;
+    testText = originText.innerHTML;
     const len = Math.max(typed.length, testText.length);
     const typed = input.value;
     let correctChars = 0;
@@ -119,7 +120,7 @@ function resetAll(){
     // Reset intervalID for checks in eventListener
     intervalID = undefined;
     // Implement random quote selection
-    originText = quotes[Math.floor(Math.random() * quotes.length)];
+    originText.innerHTML = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
 // Event listeners for keyboard input and the reset button:
