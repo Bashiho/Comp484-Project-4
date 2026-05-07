@@ -33,6 +33,8 @@ var scores = [
 
 ]
 
+originText = quotes[Math.floor(Math.random() * quotes.length)];
+
 // Add leading zero to numbers 9 or below (purely for aesthetics):
 function formatNumbers(minutes, seconds, dispms) {
     minutes = minutes < 10 ? "0" + minutes : minutes;
@@ -61,14 +63,25 @@ function startTimer() {
 // Match the text entered with the provided text on the page:
 // Probably hyper scuffed but figure it out later lol
 function compareText(){
+    let input = document.querySelector("#test-area");
     let errors = 0, wpm = 0;
-    if(testArea.innerHTML === originText){
-        completeTest();
-    }
-    else{
-        for(var i = 0; i < testArea.innerHTML.length; i++){
-            if(testArea.innerHTML[i] != originText[i])
-                errors++;
+    const len = Math.max(typed.length, testText.length);
+    const typed = input.value;
+    let correctChars = 0;
+    const perChar = [];
+    
+    for (let i = 0; i < len; i++) {
+        const t = testText[i];
+        const c = typed[i];
+        if (c === undefined) {
+          perChar.push(null);
+        } else {
+          if (c === t) {
+            correctChars++;
+            perChar.push(true);
+          } else {
+            perChar.push(false);
+          }
         }
     }
     return errors, wpm;
@@ -101,15 +114,12 @@ function checkAndUpdateScore(){
     scoreArea.innerHTML = scores;
 }
 
-// Start the timer:
-
-
 // Reset everything:
 function resetAll(){
     // Reset intervalID for checks in eventListener
     intervalID = undefined;
     // Implement random quote selection
-    originText = quotes[0]
+    originText = quotes[Math.floor(Math.random() * quotes.length)];
 }
 
 // Event listeners for keyboard input and the reset button:
